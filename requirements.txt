@@ -3,5 +3,5 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
-torch
+torch==2.4.0 -f https://download.pytorch.org/whl/cpu/torch_stable.html
 transformers
