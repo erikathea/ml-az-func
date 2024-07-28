@@ -48,7 +48,8 @@ def compute_log_likelihood(pw):
         logger.error(f"Error computing log likelihood: {str(e)}")
         raise
 
-@app.route(route="http_trigger")
+@app.function_name(name="HttpTrigger1")
+@app.route(route="hello")
 def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     logger.info('Python HTTP trigger function processed a request.')
 
