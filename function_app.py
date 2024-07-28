@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
-MODEL_PATH = os.environ.get('MODEL_PATH', './model/checkpoint-384000')
+MODEL_PATH = os.environ.get('MODEL_PATH', './model/')
 VOCAB_FILE = os.environ.get('VOCAB_FILE', './tokenizer/vocab.json')
 
 tokenizer = None
