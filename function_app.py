@@ -116,7 +116,7 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     try:
         log_likelihood = compute_log_likelihood(password)
         return func.HttpResponse(
-            f"Password Log Likelihood: {log_likelihood:.6f}",
+            f"{log_likelihood:.6f}",
             status_code=200
         )
     except Exception as e:
