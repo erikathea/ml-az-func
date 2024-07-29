@@ -36,14 +36,54 @@ def initialize():
         logger.error(f"Error initializing model or tokenizer: {str(e)}")
         raise
 
+def get_pattern(password: str):
+    result = []
+    current_type = None
+    current_length = 0
+
+    for char in password:
+        if char.isalpha():
+            if current_type == 'L':
+                current_length += 1
+            else:
+                if current_type:
+                    result.append(current_type + str(current_length))
+                current_type = 'L'
+                current_length = 1
+        elif char.isdigit():
+            if current_type == 'N':
+                current_length += 1
+            else:
+                if current_type:
+                    result.append(current_type + str(current_length))
+                current_type = 'N'
+                current_length = 1
+        else:
+            if current_type == 'S':
+                current_length += 1
+            else:
+                if current_type:
+                    result.append(current_type + str(current_length))
+                current_type = 'S'
+                current_length = 1
+
+    if current_type:
+        result.append(current_type + str(current_length))
+    return result
+
 def compute_log_likelihood(pw):
     try:
-        forgen_result = tokenizer.encode_forgen(pw)
+        logger.info("Received password: %s", pw)
+        input_pw = ' '.join(get_pattern(pw)) + ' <SEP> ' + ' '.join(list(pw))
+        logger.info("Encoding: %s", input_pw)
+        forgen_result = tokenizer.encode_forgen(input_pw)
         input_id = forgen_result.view([1, -1])
+
         with torch.no_grad():
             outputs = model(input_id, labels=input_id)
             log_likelihood = outputs.loss.item()
-        return log_likelihood
+
+       return log_likelihood
     except Exception as e:
         logger.error(f"Error computing log likelihood: {str(e)}")
         raise
