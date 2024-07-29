@@ -19,6 +19,7 @@ model = None
 def initialize():
     global tokenizer, model
     try:
+        logger.info("Initializing tokenizer...")
         tokenizer = CharTokenizer(
             vocab_file=VOCAB_FILE, 
             bos_token="<BOS>",
@@ -28,10 +29,12 @@ def initialize():
             pad_token="<PAD>"
         )
         tokenizer.padding_side = "left"
+        logger.info("Tokenizer initialized successfully.")
 
+        logger.info("Loading model from path: %s", MODEL_PATH)
         model = GPT2LMHeadModel.from_pretrained(MODEL_PATH)
         model.eval()
-        logger.info("Model and tokenizer initialized successfully")
+        logger.info("Model loaded and set to evaluation mode.")
     except Exception as e:
         logger.error(f"Error initializing model or tokenizer: {str(e)}")
         raise
@@ -83,7 +86,7 @@ def compute_log_likelihood(pw):
             outputs = model(input_id, labels=input_id)
             log_likelihood = outputs.loss.item()
 
-       return log_likelihood
+        return log_likelihood
     except Exception as e:
         logger.error(f"Error computing log likelihood: {str(e)}")
         raise
