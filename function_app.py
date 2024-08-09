@@ -1,3 +1,4 @@
+import json
 import os
 from transformers import GPT2LMHeadModel
 import torch
@@ -110,7 +111,8 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
     if not password:
         return func.HttpResponse(
-            "Please pass a password in the query string or in the request body.",
+            json.dumps({"error": "Please pass a password in the query string or in the request body."}),
+            mimetype="application/json",
             status_code=400
         )
 
@@ -123,7 +125,8 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         logger.error(f"Error processing request: {str(e)}")
         return func.HttpResponse(
-            "An error occurred while processing your request.",
+            json.dumps({"error": "An error occurred while processing your request."}),
+            mimetype="application/json",
             status_code=500
         )
 
