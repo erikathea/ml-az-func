@@ -33,6 +33,7 @@ def initialize():
 
         logger.info("Loading model from path: %s", MODEL_PATH)
         model = GPT2LMHeadModel.from_pretrained(MODEL_PATH)
+        model.resize_token_embeddings(len(tokenizer))
         model.eval()
         logger.info("Model loaded and set to evaluation mode.")
     except Exception as e:
