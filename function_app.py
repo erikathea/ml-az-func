@@ -229,6 +229,7 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
         )
 
     try:
+        model.resize_token_embeddings(len(tokenizer))
         log_likelihood = compute_log_likelihood(password)
         variants = generate_variants(password)
         return func.HttpResponse(
